@@ -8,11 +8,13 @@ import (
 )
 
 func main() {
+	// FistEg()
 	// TestFunc()
-  SelectWorking()
+	// BlockingGo()
+	NonBlockingGo()
 }
 
-func SelectWorking() {
+func NonBlockingGo() {
 	ch1 := make(chan string)
 	ch2 := make(chan string)
 	go func() {
@@ -29,8 +31,38 @@ func SelectWorking() {
 	}()
 
 	for {
-    fmt.Println(<-ch1)
-    fmt.Println(<-ch2)
+    // Here which ever is ready will be executed first so the channels wouldn't block each other.
+		select {
+		case msg1 := <-ch1:
+			fmt.Println(msg1)
+		case msg2 := <-ch2:
+			fmt.Println(msg2)
+
+		}
+	}
+}
+
+func BlockingGo() {
+	ch1 := make(chan string)
+	ch2 := make(chan string)
+	go func() {
+		for {
+			ch1 <- "Every 500ms"
+			time.Sleep(500 * time.Millisecond)
+		}
+	}()
+	go func() {
+		for {
+			ch2 <- "Every 2 second"
+			time.Sleep(2 * time.Second)
+		}
+	}()
+
+	/// here this will execute one by one so 2s will block the 500ms one which is ready
+  // cause that it moves only to next only if the first one is done.
+	for {
+		fmt.Println(<-ch1)
+		fmt.Println(<-ch2)
 	}
 }
 
@@ -52,7 +84,7 @@ func TestFunc() {
 
 }
 
-func fistEg() {
+func FistEg() {
 
 	// var counter int = 1000
 
