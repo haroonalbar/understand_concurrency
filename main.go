@@ -11,7 +11,44 @@ func main() {
 	// FistEg()
 	// TestFunc()
 	// BlockingGo()
-	NonBlockingGo()
+	// NonBlockingGo()
+  LastWorkers()
+}
+
+func LastWorkers() {
+
+	jobs := make(chan int, 100)
+	results := make(chan int, 100)
+
+  // almost uses 100% of a core to run this single goroutine
+	go workers(jobs, results)
+
+	// adding n to jobs
+	for i := 0; i < 100; i++ {
+		jobs <- i
+	}
+
+	// getting from results
+	for i := 0; i < 100; i++ {
+		fmt.Println(<-results)
+	}
+
+}
+
+// only recive from job and only send to results
+// workers goes through the jobs and adds the nth fibonacci to results
+func workers(jobs <-chan int, results chan<- int) {
+	for n := range jobs {
+		results <- fib(n)
+	}
+}
+
+// return nth fibonacci number
+func fib(n int) int {
+	if n <= 1 {
+		return n
+	}
+	return fib(n-1) + fib(n-2)
 }
 
 func NonBlockingGo() {
