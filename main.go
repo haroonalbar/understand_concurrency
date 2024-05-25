@@ -22,6 +22,12 @@ func LastWork() {
 
   // almost uses 100% of a core to run this single goroutine
 	go worker(jobs, results)
+  // if we add more workers more threads will run concurrently 
+  // using more cpu cores
+  // but in this example the results might not be in order
+	go worker(jobs, results)
+	go worker(jobs, results)
+	go worker(jobs, results)
 
 	// adding n to jobs
 	for i := 0; i < 100; i++ {
