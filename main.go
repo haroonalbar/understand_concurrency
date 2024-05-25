@@ -16,6 +16,7 @@ func main() {
 }
 
 func LastWork() {
+  //workder pools
 
 	jobs := make(chan int, 100)
 	results := make(chan int, 100)
