@@ -31,7 +31,7 @@ func NonBlockingGo() {
 	}()
 
 	for {
-    // Here which ever is ready will be executed first so the channels wouldn't block each other.
+		// Here which ever is ready will be executed first so the channels wouldn't block each other.
 		select {
 		case msg1 := <-ch1:
 			fmt.Println(msg1)
@@ -59,7 +59,7 @@ func BlockingGo() {
 	}()
 
 	/// here this will execute one by one so 2s will block the 500ms one which is ready
-  // cause that it moves only to next only if the first one is done.
+	// cause that it moves only to next only if the first one is done.
 	for {
 		fmt.Println(<-ch1)
 		fmt.Println(<-ch2)
